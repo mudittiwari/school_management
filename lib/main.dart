@@ -1,17 +1,24 @@
 // import 'dart:html';
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/Announcement.dart';
 import 'package:school_management/Assignment.dart';
 import 'package:school_management/Attendence.dart';
+import 'package:school_management/Homepage.dart';
 import 'package:school_management/Notice.dart';
 import 'package:school_management/Results.dart';
+import 'package:school_management/Signup.dart';
 
 import 'Profile.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -36,575 +43,194 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController role = TextEditingController();
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xffEA5353),
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-          backgroundColor: Color(0xff342F2F),
-          child: ListView(children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()))
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Profile",
-                        )),
-                  ),
-                  color: Color(0xffDBD9D9)),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Image(
+              image: AssetImage("assets/images/login.png"),
+              height: MediaQuery.of(context).size.height * .8,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {},
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Home",
-                        style: TextStyle(color: Colors.white),
-                      )),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 128.0, left: 20),
+                child: Text(
+                  "Log In",
+                  style: TextStyle(color: Colors.white, fontSize: 28),
                 ),
-                color: Color(0xff342F2F),
-                elevation: 0,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Attendence()))
-                },
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Align(
+                alignment: Alignment.centerRight,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Attendance",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Assignment()))
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Assignment",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {},
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Department",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Results()))
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Results",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Notice()))
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Notice",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Announcement()))
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Announcement",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
-          ])),
-      appBar: AppBar(
-        backgroundColor: Color(0xff342F2F),
-        title: Text("Student's Name"),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 22),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("TODAY CLASSES",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 25,
-                        color: Color(0xffEA5353))),
-                SizedBox(
-                    width: 90,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: Colors.white),
+                    height: 200,
+                    width: MediaQuery.of(context).size.width * .8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 4),
+                            child: TextField(
+                              controller: email,
+                              decoration:
+                                  InputDecoration(hintText: "User Name"),
+                            ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text("Date"),
-                          )
-                        ]))
-              ],
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 4),
+                            child: TextField(
+                              controller: password,
+                              decoration: InputDecoration(hintText: "Password"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 4),
+                            child: TextField(
+                              controller: role,
+                              decoration: InputDecoration(hintText: "Role"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // color: Colors.blue,
+                  ),
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  child: SizedBox(
-                    height: 125,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * .9,
-                            height: 125,
-                            color: Color(0xff342F2F),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 80.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Class Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Room No.- 00",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Teacher Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 10),
-                                            child: MaterialButton(
-                                              color: Colors.white,
-                                              onPressed: () => {},
-                                              child: Text("Join"),
-                                            ),
-                                          )
-                                        ]),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xffEA5353),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child: Text("12:00 PM",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18))),
-                          ),
-                          height: 100,
-                          width: 100,
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 270.0, right: 59),
+                child: Align(
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    onPressed: () async {
+                      showLoaderDialog(context);
+
+                      // await FirebaseFirestore.instance
+                      //     .collection('students')
+                      //     .get()
+                      //     .then((value) => print(value.docs));
+                      FirebaseFirestore.instance
+                          .collection(role.text.trim())
+                          .where('email', isEqualTo: email.text.trim())
+                          .get()
+                          .then((value) async {
+                        print(value.docs);
+                        if (value.docs.isEmpty) {
+                          print("user not found");
+                          Navigator.pop(context);
+                        } else {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: email.text.trim(),
+                                  password: password.text.trim())
+                              .then((value) {
+                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Homepage()));
+                          }).catchError((e) {
+                            Navigator.pop(context);
+                            print(e);
+                          });
+                        }
+                      }).catchError((e) {
+                        Navigator.pop(context);
+                        print(e);
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 14),
+                      child: Text(
+                        "Log in",
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-                      )
-                    ]),
+                      ),
+                    ),
+                    color: Color(0xff342F2F),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  child: SizedBox(
-                    height: 125,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * .9,
-                            height: 125,
-                            color: Color(0xff342F2F),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 80.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Class Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Room No.- 00",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Teacher Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 10),
-                                            child: MaterialButton(
-                                              color: Colors.white,
-                                              onPressed: () => {},
-                                              child: Text("Join"),
-                                            ),
-                                          )
-                                        ]),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xffEA5353),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child: Text("12:00 PM",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18))),
-                          ),
-                          height: 100,
-                          width: 100,
-                        ),
-                      )
-                    ]),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  child: SizedBox(
-                    height: 125,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * .9,
-                            height: 125,
-                            color: Color(0xff342F2F),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 80.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Class Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Room No.- 00",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Text("Teacher Name",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 10),
-                                            child: MaterialButton(
-                                              color: Colors.white,
-                                              onPressed: () => {},
-                                              child: Text("Join"),
-                                            ),
-                                          )
-                                        ]),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xffEA5353),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child: Text("12:00 PM",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18))),
-                          ),
-                          height: 100,
-                          width: 100,
-                        ),
-                      )
-                    ]),
-                  ),
-                ),
-              ],
+              ),
             ),
-          )
-        ],
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Signup()));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 14),
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 0,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
