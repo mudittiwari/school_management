@@ -2,8 +2,10 @@
 
 //import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/Homepage.dart';
 
 import 'Announcement.dart';
 import 'Assignment.dart';
@@ -12,6 +14,10 @@ import 'Notice.dart';
 import 'Results.dart';
 
 class Profile extends StatefulWidget {
+  DocumentSnapshot document;
+
+  Profile(this.document, {Key? key}) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -28,8 +34,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                   onPressed: () => {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Profile()))
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile(widget.document)))
                       },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -53,7 +61,12 @@ class _ProfileState extends State<Profile> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Homepage(widget.document)))
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
@@ -80,8 +93,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Attendence()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Attendence(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -109,8 +124,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Assignment()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Assignment(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -164,8 +181,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Results()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Results(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -193,8 +212,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Notice()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Notice(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -222,8 +243,10 @@ class _ProfileState extends State<Profile> {
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Announcement()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Announcement(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -275,7 +298,7 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 3),
                     child: Text(
-                      "Student Name",
+                      widget.document.get('name'),
                       style: TextStyle(fontSize: 24, color: Color(0xff342F2F)),
                     ),
                   ),
@@ -283,7 +306,7 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 3),
                     child: Text(
-                      "Class",
+                      widget.document.get('class'),
                       style: TextStyle(fontSize: 24, color: Color(0xff342F2F)),
                     ),
                   ),
@@ -304,8 +327,75 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    widget.document.get("role") == "student"
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .8,
+                              height: 30,
+                              color: Color(0xffEEEEEE),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text(
+                                      "Program:",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Color(0xffEA5353)),
+                                    )),
+                                  )),
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text("ABCD",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Color(0xffEA5353)))),
+                                    scrollDirection: Axis.horizontal,
+                                  ))
+                                ],
+                              ),
+                            ),
+                          )
+                        : Text(""),
+                    widget.document.get("role") == "student"
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .8,
+                              height: 30,
+                              color: Color(0xffEEEEEE),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                          child: Center(
+                                              child: Text(
+                                    "Roll No:",
+                                    style: TextStyle(
+                                        fontSize: 18, color: Color(0xffEA5353)),
+                                  )))),
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text(widget.document.get('rollno'),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Color(0xffEA5353)))),
+                                    scrollDirection: Axis.horizontal,
+                                  ))
+                                ],
+                              ),
+                            ),
+                          )
+                        : Text(""),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width * .8,
                         height: 30,
@@ -313,201 +403,29 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           children: [
                             Expanded(
-                                child: Center(
-                                    child: Text(
-                              "Program:",
+                                child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text(
+                              "Email:",
                               style: TextStyle(
                                   fontSize: 18, color: Color(0xffEA5353)),
-                            ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Branch:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Year:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Semester:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Roll No:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Email:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Center(
-                                    child: Text(
-                                      "Mobile:",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xffEA5353)),
-                                    ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
+                            )))),
                             Expanded(
                                 child: SingleChildScrollView(
-                                  child: Center(
-                                      child: Text(
-                                        "Guardian Name:",
-                                        style: TextStyle(
-                                            fontSize: 18, color: Color(0xffEA5353)),
-                                      )),
-                                )),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))))
+                              child: Center(
+                                  child: Text(widget.document.get('email'),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Color(0xffEA5353)))),
+                              scrollDirection: Axis.horizontal,
+                            ))
                           ],
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width * .8,
                         height: 30,
@@ -515,25 +433,101 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           children: [
                             Expanded(
+                             
                                 child: SingleChildScrollView(
-                                  child: Center(
+                                    child: Center(
+                                        child: Text(
+                              "Mobile:",
+                              style: TextStyle(
+                                  fontSize: 18, color: Color(0xffEA5353)),
+                            )))),
+                            Expanded(
+                              
+                              child: SingleChildScrollView(
+                                child: Center(
+                                    child: Text(widget.document.get('mobno'),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xffEA5353)))),
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    widget.document.get("role") == "student"
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .8,
+                              height: 30,
+                              color: Color(0xffEEEEEE),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text(
+                                      "Guardian Name:",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Color(0xffEA5353)),
+                                    )),
+                                    scrollDirection: Axis.horizontal,
+                                  )),
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                      child: Text(widget.document.get('father'),
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Color(0xffEA5353))),
+                                    ),
+                                    scrollDirection: Axis.horizontal,
+                                  ))
+                                ],
+                              ),
+                            ),
+                          )
+                        : Text(""),
+                    widget.document.get("role") == "student"
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .8,
+                              height: 30,
+                              color: Color(0xffEEEEEE),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
                                       child: Text(
                                         "Guardian Mobile:",
                                         style: TextStyle(
-                                            fontSize: 18, color: Color(0xffEA5353)),
-                                      )),
-                                )),
-                            Expanded(
-                                child: Center(
-                                    child: Text("ABCD",
-                                        style: TextStyle(
                                             fontSize: 18,
-                                            color: Color(0xffEA5353)))))
-                          ],
-                        ),
-                      ),
-                    ),
-
+                                            color: Color(0xffEA5353)),
+                                      ),
+                                    ),
+                                    scrollDirection: Axis.horizontal,
+                                  )),
+                                  Expanded(
+                                      child: SingleChildScrollView(
+                                    child: Center(
+                                        child: Text(widget.document.get('fathermob'),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Color(0xffEA5353)))),
+                                    scrollDirection: Axis.horizontal,
+                                  ))
+                                ],
+                              ),
+                            ),
+                          )
+                        : Text(""),
                   ],
                 ),
               ),

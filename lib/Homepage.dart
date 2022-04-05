@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'Announcement.dart';
@@ -9,7 +10,10 @@ import 'Profile.dart';
 import 'Results.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  // const Homepage({Key? key}) : super(key: key);
+  DocumentSnapshot document;
+
+  Homepage(this.document, {Key? key}) : super(key: key);
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -18,18 +22,21 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    // print(widget.document);
     return Scaffold(
       drawer: Drawer(
           backgroundColor: Color(0xff342F2F),
           child: ListView(children: [
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                   onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()))
-                  },
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile(widget.document)))
+                      },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14.0, horizontal: 0),
@@ -37,9 +44,10 @@ class _HomepageState extends State<Homepage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Profile",
+                          style: TextStyle(color: Colors.white),
                         )),
                   ),
-                  color: Color(0xffDBD9D9)),
+                  color: Color(0xff342F2F)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
@@ -50,20 +58,24 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Homepage(widget.document)))
+                },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Home",
-                        style: TextStyle(color: Colors.white),
                       )),
                 ),
-                color: Color(0xff342F2F),
+                color: Color(0xffDBD9D9),
                 elevation: 0,
               ),
             ),
@@ -76,15 +88,17 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Attendence()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Attendence(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -105,15 +119,17 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Assignment()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Assignment(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -134,12 +150,12 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {},
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -160,15 +176,17 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Results()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Results(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -189,15 +207,17 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Notice()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Notice(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -218,15 +238,17 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Announcement()))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Announcement(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -310,7 +332,7 @@ class _HomepageState extends State<Homepage> {
               children: [
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   child: SizedBox(
                     height: 125,
                     width: MediaQuery.of(context).size.width,
@@ -325,7 +347,7 @@ class _HomepageState extends State<Homepage> {
                               padding: const EdgeInsets.only(left: 80.0),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -360,7 +382,7 @@ class _HomepageState extends State<Homepage> {
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(
@@ -401,7 +423,7 @@ class _HomepageState extends State<Homepage> {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   child: SizedBox(
                     height: 125,
                     width: MediaQuery.of(context).size.width,
@@ -416,7 +438,7 @@ class _HomepageState extends State<Homepage> {
                               padding: const EdgeInsets.only(left: 80.0),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -451,7 +473,7 @@ class _HomepageState extends State<Homepage> {
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(
@@ -492,7 +514,7 @@ class _HomepageState extends State<Homepage> {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   child: SizedBox(
                     height: 125,
                     width: MediaQuery.of(context).size.width,
@@ -507,7 +529,7 @@ class _HomepageState extends State<Homepage> {
                               padding: const EdgeInsets.only(left: 80.0),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -542,7 +564,7 @@ class _HomepageState extends State<Homepage> {
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(

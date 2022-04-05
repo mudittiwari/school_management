@@ -1,12 +1,16 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/Results.dart';
 
 import 'Announcement.dart';
 import 'Attendence.dart';
 import 'Notice.dart';
 
 class Assignment extends StatefulWidget {
+  DocumentSnapshot document;
+  Assignment(this.document, {Key? key}) : super(key: key);
   @override
   _AssignmentState createState() => _AssignmentState();
 }
@@ -541,7 +545,7 @@ class _AssignmentState extends State<Assignment> {
                 child: MaterialButton(
                   onPressed: () => {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Attendence()))
+                        MaterialPageRoute(builder: (context) => Attendence(widget.document)))
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -622,7 +626,10 @@ class _AssignmentState extends State<Assignment> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () => {},
+                  onPressed: () => {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Results(widget.document)))
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14.0, horizontal: 0),
@@ -651,7 +658,7 @@ class _AssignmentState extends State<Assignment> {
                 child: MaterialButton(
                   onPressed: () => {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Notice()))
+                        MaterialPageRoute(builder: (context) => Notice(widget.document)))
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -681,7 +688,7 @@ class _AssignmentState extends State<Assignment> {
                 child: MaterialButton(
                   onPressed: () => {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Announcement()))
+                        MaterialPageRoute(builder: (context) => Announcement(widget.document)))
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

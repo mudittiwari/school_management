@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Attendence extends StatefulWidget {
+  DocumentSnapshot document;
+  Attendence(this.document, {Key? key}) : super(key: key);
   @override
   _AttendenceState createState() => _AttendenceState();
 }

@@ -158,10 +158,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           .collection(role.text.trim())
                           .where('email', isEqualTo: email.text.trim())
                           .get()
-                          .then((value) async {
-                        print(value.docs);
-                        if (value.docs.isEmpty) {
-                          print("user not found");
+                          .then((document) async {
+                        // print(value.docs);
+
+                        if (document.docs.isEmpty) {
+                          // print("user not found");
                           Navigator.pop(context);
                         } else {
                           await FirebaseAuth.instance
@@ -173,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Homepage()));
+                                    builder: (context) => Homepage(document.docs.first)));
                           }).catchError((e) {
                             Navigator.pop(context);
                             print(e);

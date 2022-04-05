@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/Homepage.dart';
 
 import 'Announcement.dart';
 import 'Assignment.dart';
@@ -9,6 +11,8 @@ import 'Attendence.dart';
 import 'Notice.dart';
 
 class Results extends StatefulWidget {
+  DocumentSnapshot document;
+  Results(this.document, {Key? key}) : super(key: key);
   @override
   _ResultsState createState() => _ResultsState();
 }
@@ -49,7 +53,10 @@ class _ResultsState extends State<Results> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Homepage(widget.document)))
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
@@ -77,7 +84,7 @@ class _ResultsState extends State<Results> {
               child: MaterialButton(
                 onPressed: () => {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Attendence()))
+                      MaterialPageRoute(builder: (context) => Attendence(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -106,7 +113,7 @@ class _ResultsState extends State<Results> {
               child: MaterialButton(
                 onPressed: () => {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Assignment()))
+                      MaterialPageRoute(builder: (context) => Assignment(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -161,7 +168,7 @@ class _ResultsState extends State<Results> {
               child: MaterialButton(
                 onPressed: () => {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Results()))
+                      MaterialPageRoute(builder: (context) => Results(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -189,7 +196,7 @@ class _ResultsState extends State<Results> {
               child: MaterialButton(
                 onPressed: () => {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Notice()))
+                      MaterialPageRoute(builder: (context) => Notice(widget.document)))
                 },
                 child: Padding(
                   padding:
@@ -218,7 +225,7 @@ class _ResultsState extends State<Results> {
               child: MaterialButton(
                 onPressed: () => {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Announcement()))
+                      MaterialPageRoute(builder: (context) => Announcement(widget.document)))
                 },
                 child: Padding(
                   padding:
