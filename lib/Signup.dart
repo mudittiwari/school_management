@@ -23,13 +23,36 @@ class _SignupState extends State<Signup> {
   TextEditingController fathermobno = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController role = TextEditingController();
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
         children: [
-          CircularProgressIndicator(color: Color(0xffEA5353),),
+          CircularProgressIndicator(
+            color: Color(0xffEA5353),
+          ),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showvalidatorbox(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+              child: Container(
+                  margin: EdgeInsets.only(left: 7), child: Text(message))),
         ],
       ),
     );
@@ -168,51 +191,79 @@ class _SignupState extends State<Signup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                     onPressed: () async {
-                      showLoaderDialog(context);
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email.text.trim(), password: password.text.trim())
-                          .then((value) async{
-                            if(role.text.trim()=="student")
-                              {
-                                FirebaseFirestore.instance.collection('student').add({
-                                  'name':name.text.trim(),
-                                  'email':email.text.trim(),
-                                  'class':class_.text.trim(),
-                                  'rollno':rollno.text.trim(),
-                                  'mobno':mobno.text.trim(),
-                                  'father':fathername.text.trim(),
-                                  'fathermob':fathermobno.text.trim(),
-                                  'role':'student'
-
-                                });
-                              }
-                            else if(role.text.trim()=="teacher")
-                            {
-                              FirebaseFirestore.instance.collection('teacher').add({
-                                'name':name.text.trim(),
-                                'email':email.text.trim(),
-                                'class':class_.text.trim(),
-                                'mobno':mobno.text.trim(),
-                                'role':'teacher'
-                              });
-                            }
-                            else
-                              {
-                                FirebaseFirestore.instance.collection('principal').add({
-                                  'name':name.text.trim(),
-                                  'email':email.text.trim(),
-                                  'mobno':mobno.text.trim(),
-                                  'role':'principal'
-                                });
-                              }
-                      })
-                          .catchError((e) {
-                        print(e);
-                      });
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()));
+                      if (name.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter your name");
+                      } else if (email.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter the email");
+                      } else if (class_.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter the class");
+                      } else if (rollno.text.trim().length == 0) {
+                        showvalidatorbox(
+                            context, "Please enter the roll number");
+                      } else if (mobno.text.trim().length != 10) {
+                        showvalidatorbox(
+                            context, "Please enter the correct mobile number");
+                      } else if (fathername.text.trim().length == 0) {
+                        showvalidatorbox(
+                            context, "Please enter the father name");
+                      } else if (fathermobno.text.trim().length != 0) {
+                        showvalidatorbox(context,
+                            "Please enter the correct father mobile number");
+                      } else if (password.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter the password");
+                      } else if (role.text.trim() != "student" &&
+                          role.text.trim() != "teacher") {
+                        showvalidatorbox(
+                            context, "Please enter the correct role");
+                      } else {
+                        showLoaderDialog(context);
+                        await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                                email: email.text.trim(),
+                                password: password.text.trim())
+                            .then((value) async {
+                          if (role.text.trim() == "student") {
+                            FirebaseFirestore.instance
+                                .collection('student')
+                                .add({
+                              'name': name.text.trim(),
+                              'email': email.text.trim(),
+                              'class': class_.text.trim(),
+                              'rollno': rollno.text.trim(),
+                              'mobno': mobno.text.trim(),
+                              'father': fathername.text.trim(),
+                              'fathermob': fathermobno.text.trim(),
+                              'role': 'student'
+                            });
+                          } else if (role.text.trim() == "teacher") {
+                            FirebaseFirestore.instance
+                                .collection('teacher')
+                                .add({
+                              'name': name.text.trim(),
+                              'email': email.text.trim(),
+                              'class': class_.text.trim(),
+                              'mobno': mobno.text.trim(),
+                              'role': 'teacher'
+                            });
+                          } else {
+                            FirebaseFirestore.instance
+                                .collection('principal')
+                                .add({
+                              'name': name.text.trim(),
+                              'email': email.text.trim(),
+                              'mobno': mobno.text.trim(),
+                              'role': 'principal'
+                            });
+                          }
+                        }).catchError((e) {
+                          print(e);
+                        });
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()));
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

@@ -28,9 +28,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+        routes: {
+          '/': (BuildContext context) => MyHomePage(),
+        },
       title: 'Flutter Demo',
-      home: MyHomePage(),
+      // home: MyHomePage(),
     );
   }
 }
@@ -56,6 +59,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showvalidatorbox(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(margin: EdgeInsets.only(left: 7), child: Text(message)),
         ],
       ),
     );
@@ -148,42 +169,53 @@ class _MyHomePageState extends State<MyHomePage> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                     onPressed: () async {
-                      showLoaderDialog(context);
+                      if (email.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter the email");
+                      } else if (password.text.trim().length == 0) {
+                        showvalidatorbox(context, "Please enter the password");
+                      } else if (role.text.trim() != "student" &&
+                          role.text.trim() != "teacher") {
+                        showvalidatorbox(
+                            context, "Please enter the correct role");
+                      } else {
+                        showLoaderDialog(context);
 
-                      // await FirebaseFirestore.instance
-                      //     .collection('students')
-                      //     .get()
-                      //     .then((value) => print(value.docs));
-                      FirebaseFirestore.instance
-                          .collection(role.text.trim())
-                          .where('email', isEqualTo: email.text.trim())
-                          .get()
-                          .then((document) async {
-                        // print(value.docs);
+                        // await FirebaseFirestore.instance
+                        //     .collection('students')
+                        //     .get()
+                        //     .then((value) => print(value.docs));
+                        FirebaseFirestore.instance
+                            .collection(role.text.trim())
+                            .where('email', isEqualTo: email.text.trim())
+                            .get()
+                            .then((document) async {
+                          // print(value.docs);
 
-                        if (document.docs.isEmpty) {
-                          // print("user not found");
+                          if (document.docs.isEmpty) {
+                            // print("user not found");
+                            Navigator.pop(context);
+                          } else {
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: email.text.trim(),
+                                    password: password.text.trim())
+                                .then((value) {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Homepage(document.docs.first)));
+                            }).catchError((e) {
+                              Navigator.pop(context);
+                              print(e);
+                            });
+                          }
+                        }).catchError((e) {
                           Navigator.pop(context);
-                        } else {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: email.text.trim(),
-                                  password: password.text.trim())
-                              .then((value) {
-                            Navigator.pop(context);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Homepage(document.docs.first)));
-                          }).catchError((e) {
-                            Navigator.pop(context);
-                            print(e);
-                          });
-                        }
-                      }).catchError((e) {
-                        Navigator.pop(context);
-                        print(e);
-                      });
+                          print(e);
+                        });
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

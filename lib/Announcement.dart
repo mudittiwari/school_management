@@ -3,6 +3,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ import 'Homepage.dart';
 import 'Notice.dart';
 import 'Profile.dart';
 import 'Results.dart';
+import 'main.dart';
 
 class Announcement extends StatefulWidget {
   DocumentSnapshot document;
@@ -213,39 +215,39 @@ Addannouncemnet(BuildContext context) async {
                   color: Colors.white,
                 ),
               ),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () =>
-                  {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Assignment(widget.document)))
-                  },
-                  child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Assignment",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
+              // Padding(
+              //   padding:
+              //   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              //   child: MaterialButton(
+              //     onPressed: () =>
+              //     {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => Assignment(widget.document)))
+              //     },
+              //     child: Padding(
+              //       padding:
+              //       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+              //       child: Align(
+              //           alignment: Alignment.centerLeft,
+              //           child: Text(
+              //             "Assignment",
+              //             style: TextStyle(color: Colors.white),
+              //           )),
+              //     ),
+              //     color: Color(0xff342F2F),
+              //     elevation: 0,
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //       horizontal: 8.0, vertical: 0),
+              //   child: Divider(
+              //     height: 2,
+              //     color: Colors.white,
+              //   ),
+              // ),
               Padding(
                 padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -370,6 +372,32 @@ Addannouncemnet(BuildContext context) async {
                 child: Divider(
                   height: 2,
                   color: Colors.white,
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                child: MaterialButton(
+                  onPressed: () async{
+                    await FirebaseAuth.instance.signOut();
+
+                    Navigator.popUntil(
+                        context,
+                        ModalRoute.withName('/'));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                  },
+                  child: Padding(
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Logout",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                  ),
+                  color: Color(0xff342F2F),
+                  elevation: 0,
                 ),
               ),
             ])),

@@ -3,6 +3,7 @@
 //import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/Homepage.dart';
@@ -13,6 +14,7 @@ import 'Assignment.dart';
 import 'Attendence.dart';
 import 'Notice.dart';
 import 'Searchatten.dart';
+import 'main.dart';
 
 class Results extends StatefulWidget {
   DocumentSnapshot document;
@@ -644,32 +646,32 @@ class _ResultsState extends State<Results> {
                 color: Colors.white,
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {},
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Department",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
+            // Padding(
+            //   padding:
+            //       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            //   child: MaterialButton(
+            //     onPressed: () => {},
+            //     child: Padding(
+            //       padding:
+            //           const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+            //       child: Align(
+            //           alignment: Alignment.centerLeft,
+            //           child: Text(
+            //             "Department",
+            //             style: TextStyle(color: Colors.white),
+            //           )),
+            //     ),
+            //     color: Color(0xff342F2F),
+            //     elevation: 0,
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+            //   child: Divider(
+            //     height: 2,
+            //     color: Colors.white,
+            //   ),
+            // ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -760,6 +762,32 @@ class _ResultsState extends State<Results> {
               child: Divider(
                 height: 2,
                 color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () async{
+                  await FirebaseAuth.instance.signOut();
+
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName('/'));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                },
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
               ),
             ),
           ])),
