@@ -10,751 +10,612 @@ import 'Notice.dart';
 
 class Assignment extends StatefulWidget {
   DocumentSnapshot document;
+
   Assignment(this.document, {Key? key}) : super(key: key);
+
   @override
   _AssignmentState createState() => _AssignmentState();
 }
 
 class _AssignmentState extends State<Assignment> {
-  String active = "completed";
-  Color rcolor = Color(0xffEEEEEE);
-  Color ccolor = Color(0xffEA5353);
-  Color rtext = Colors.black;
-  Color ctext = Colors.white;
+  TextEditingController assignment = TextEditingController();
+  TextEditingController due_date = TextEditingController();
 
-  Widget mainwidget() {
-    if (active == "completed") {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 200,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Submitted on: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        ))
-                  ],
-                ),
-              ),
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xffEA5353),
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Addassignment(BuildContext context) async {
+    AlertDialog alert = AlertDialog(
+        actions: [
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () async {
+                // print("mudit");
+                showLoaderDialog(context);
+                await FirebaseFirestore.instance.collection("assignment").add({
+                  'added_by': widget.document.get('name'),
+                  'class': widget.document.get('class'),
+                  'content': assignment.text.trim(),
+                  'due_date': due_date.text.trim(),
+                });
+                assignment.text = "";
+                due_date.text = "";
+                Navigator.pop(context);
+                Navigator.pop(context);
+                setState(() {});
+              },
+              child: Text("Create"),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 200,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Submitted on: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        ))
-                  ],
-                ),
-              ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.pop(context);
+                assignment.text = "";
+                due_date.text = "";
+              },
+              child: Text("Cancel"),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 200,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Submitted on: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        ))
-                  ],
-                ),
-              ),
+          )
+        ],
+        content: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 7),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: due_date,
+                          decoration:
+                              InputDecoration(hintText: "Type due_date"),
+                        ),
+                        TextField(
+                          controller: assignment,
+                          decoration:
+                              InputDecoration(hintText: "Type assignment"),
+                        ),
+                      ],
+                    )),
+              ],
             ),
-          ],
-        ),
-      );
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 250,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Due Date: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Upload Assignment",
-                              style: TextStyle(color: Color(0xffEA5353)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(color: Color(0xff000000)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+          ),
+        ));
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  EditAssignment(BuildContext context, String sub) async {
+    AlertDialog alert = AlertDialog(
+        actions: [
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () async {
+                var ref;
+                // print("mudit");
+                showLoaderDialog(context);
+                await FirebaseFirestore.instance
+                    .collection('assignment')
+                    .where('due_date', isEqualTo: sub)
+                    .get()
+                    .then((value) {
+                  ref = value.docs.first.id;
+                  print(ref);
+                }).catchError((e) {
+                  print(e);
+                });
+                await FirebaseFirestore.instance
+                    .collection('assignment')
+                    .doc(ref)
+                    .update({
+                  'content': assignment.text.trim(),
+                  'due_date': due_date.text.trim(),
+                });
+                assignment.text = "";
+                due_date.text = "";
+                Navigator.pop(context);
+                Navigator.pop(context);
+                setState(() {});
+              },
+              child: Text("Submit"),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 250,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Due Date: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Upload Assignment",
-                              style: TextStyle(color: Color(0xffEA5353)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(color: Color(0xff000000)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.pop(context);
+                assignment.text = "";
+                due_date.text = "";
+              },
+              child: Text("Cancel"),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-              child: Container(
-                height: 250,
-                width: MediaQuery.of(context).size.width * .8,
-                decoration: BoxDecoration(
-                    color: Color(0xffD7D4D4),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Due Date: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "10-10-2020",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subject: ",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          ),
-                          Text(
-                            "English",
-                            style: TextStyle(
-                                color: Color(0xffEA5353), fontSize: 18),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi elit, libero, aliquam urna aliquet eu in volutpat tempus. Amet lacus in duis a, eu.",
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Upload Assignment",
-                              style: TextStyle(color: Color(0xffEA5353)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          MaterialButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(color: Color(0xff000000)),
-                            ),
-                            color: Color(0xffF3F2F2),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+          )
+        ],
+        content: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 7),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: due_date,
+                          decoration:
+                              InputDecoration(hintText: "Type new due_date"),
+                        ),
+                        TextField(
+                          controller: assignment,
+                          decoration:
+                              InputDecoration(hintText: "Type new assignment"),
+                        ),
+                      ],
+                    )),
+              ],
             ),
-          ],
-        ),
-      );
-    }
+          ),
+        ));
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<QuerySnapshot> getassignment() async {
+    return await FirebaseFirestore.instance.collection('assignment').get();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragEnd: (DragEndDetails details) {
-        if (details.primaryVelocity! > 0) {
-          if (active != "completed") {
-            active = "completed";
-            rcolor = Color(0xffEEEEEE);
-            ccolor = Color(0xffEA5353);
-            rtext = Colors.black;
-            ctext = Colors.white;
-            setState(() {});
-          }
-        } else if (details.primaryVelocity! < 0) {
-          if (active != "passed") {
-//            print("tiwari");
-            active = "remaining";
-            rcolor = Color(0xffEA5353);
-            ccolor = Color(0xffEEEEEE);
-            ctext = Colors.black;
-            rtext = Colors.white;
-            setState(() {});
-          }
-        }
-      },
-      child: Scaffold(
-        drawer: Drawer(
-            backgroundColor: Color(0xff342F2F),
-            child: ListView(children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Profile",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Home",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Attendence(widget.document)))
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Attendance",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Assignment",
-                        )),
-                  ),
-                  color: Color(0xffDBD9D9),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Department",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Results(widget.document)))
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Results",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Notice(widget.document)))
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Notice",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: MaterialButton(
-                  onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Announcement(widget.document)))
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Announcement",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  color: Color(0xff342F2F),
-                  elevation: 0,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                child: Divider(
-                  height: 2,
-                  color: Colors.white,
-                ),
-              ),
-            ])),
-        appBar: AppBar(
+    return Scaffold(
+      drawer: Drawer(
           backgroundColor: Color(0xff342F2F),
-          title: Text("Assignment"),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
+          child: ListView(children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-              child: Center(
-                child: Container(
-                  width: 260,
-                  height: 40,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Container(
-                        height: 40,
-                        color: ccolor,
-                        child: Center(
-                            child: Text(
-                          "Completed",
-                          style: TextStyle(color: ctext, fontSize: 16),
-                        )),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {},
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Profile",
+                        style: TextStyle(color: Colors.white),
                       )),
-                      Expanded(
-                          child: Container(
-                        height: 40,
-                        color: rcolor,
-                        child: Center(
-                            child: Text("Remaining",
-                                style: TextStyle(color: rtext, fontSize: 16))),
-                      ))
-                    ],
-                  ),
                 ),
+                color: Color(0xff342F2F),
+                elevation: 0,
               ),
             ),
-            Expanded(child: mainwidget()),
-          ],
-        ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {},
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Home",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Attendence(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Attendance",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {},
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Assignment",
+                      )),
+                ),
+                color: Color(0xffDBD9D9),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {},
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Department",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Results(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Results",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Notice(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Notice",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Announcement(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Announcement",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ),
+          ])),
+      appBar: AppBar(
+        backgroundColor: Color(0xff342F2F),
+        title: Text("Assignment"),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0),
+            child: FutureBuilder(
+              future: getassignment(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xff342F2F),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Icon(Icons.error),
+                  );
+                } else {
+                  int? cnt = snapshot.data?.docs.length;
+                  if (cnt != null) {
+                    cnt += 1;
+                  } else {
+                    cnt = 1;
+                  }
+                  return ListView.builder(
+                    itemCount: cnt,
+                    itemBuilder: (context, index) {
+                      if (index == (cnt! - 1)) {
+                        return widget.document.get('role') == "teacher"
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      MaterialButton(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0, horizontal: 12),
+                                          onPressed: () {
+                                            Addassignment(context);
+                                          },
+                                          color: Color(0xffEEEEEE),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Text(
+                                            "Add Assignment",
+                                            style: TextStyle(
+                                                color: Color(0xffEA5353),
+                                                fontSize: 17),
+                                          )),
+                                    ]),
+                              )
+                            : Text("");
+                      } else {
+                        return Container(
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Color(0xffC4C4C4)),
+                                ),
+                                title: Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 0),
+                                            child: Text(
+                                              "Due Date: ",
+                                              style: TextStyle(
+                                                color: Color(0xffEA5353),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 0),
+                                            child: Text(
+                                              snapshot.data?.docs[index]
+                                                  .get('due_date'),
+                                              style: TextStyle(
+                                                color: Color(0xffEA5353),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(snapshot.data?.docs[index]
+                                          .get('content'))
+                                    ],
+                                  ),
+                                ),
+                                trailing:
+                                    widget.document.get('role') == 'teacher'
+                                        ? IconButton(
+                                            onPressed: () {
+                                              EditAssignment(
+                                                  context,
+                                                  snapshot.data?.docs[index]
+                                                      .get('due_date'));
+                                            },
+                                            icon: Icon(Icons.edit))
+                                        : Text(""),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Divider(
+                                  height: 2,
+                                  color: Color(0xffB6B0B0),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  );
+                }
+              },
+              // child: ListView(
+              //   children: [
+              //     ListTile(
+              //       leading: Container(
+              //         height: 60,
+              //         width: 60,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(30),
+              //             color: Color(0xffC4C4C4)),
+              //       ),
+              //       title: Padding(
+              //         padding: const EdgeInsets.only(top: 10.0),
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Padding(
+              //               padding: const EdgeInsets.symmetric(
+              //                   vertical: 4.0, horizontal: 0),
+              //               child: Text(
+              //                 "due_date",
+              //                 style: TextStyle(
+              //                   color: Color(0xffEA5353),
+              //                   fontSize: 18,
+              //                   fontWeight: FontWeight.w500,
+              //                 ),
+              //               ),
+              //             ),
+              //             Text(
+              //                 "tLorem ipsum dolor sit amet, consectetur adipiscing elit. Orci, facilisis in velit semper luctus. Iaculis consequat velit risus massa ut at a.")
+              //           ],
+              //         ),
+              //       ),
+              //       trailing: Icon(Icons.edit),
+              //     ),
+              //     Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: Divider(
+              //         height: 2,
+              //         color: Color(0xffB6B0B0),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+            ),
+          ))
+        ],
       ),
     );
   }

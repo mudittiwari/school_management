@@ -183,6 +183,7 @@ class _SignupState extends State<Signup> {
                                   'mobno':mobno.text.trim(),
                                   'father':fathername.text.trim(),
                                   'fathermob':fathermobno.text.trim(),
+                                  'role':'student'
 
                                 });
                               }
@@ -193,6 +194,7 @@ class _SignupState extends State<Signup> {
                                 'email':email.text.trim(),
                                 'class':class_.text.trim(),
                                 'mobno':mobno.text.trim(),
+                                'role':'teacher'
                               });
                             }
                             else
@@ -201,6 +203,7 @@ class _SignupState extends State<Signup> {
                                   'name':name.text.trim(),
                                   'email':email.text.trim(),
                                   'mobno':mobno.text.trim(),
+                                  'role':'principal'
                                 });
                               }
                       })

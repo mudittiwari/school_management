@@ -47,6 +47,7 @@ class _HomepageState extends State<Homepage> {
                           style: TextStyle(color: Colors.white),
                         )),
                   ),
+                  elevation:0,
                   color: Color(0xff342F2F)),
             ),
             Padding(
