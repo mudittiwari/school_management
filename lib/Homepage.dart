@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+//import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,70 @@ import 'Attendence.dart';
 import 'Notice.dart';
 import 'Profile.dart';
 import 'Results.dart';
+
+
+class timeanddate extends StatefulWidget {
+  @override
+  _timeanddateState createState() => _timeanddateState();
+}
+
+class _timeanddateState extends State<timeanddate> {
+  DateTime now = DateTime.now();
+  late DateTime date;
+  @override
+  void initState() {
+    date =DateTime(now.year, now.month, now.day);
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: 135,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: 20,
+                      width: 30,
+                      color: Color(0xffDEDEDE),
+                      child: Center(
+                        child: Text(date.day.toString()),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: 20,
+                      width: 30,
+                      color: Color(0xffDEDEDE),
+                      child: Center(
+                        child: Text(date.month.toString()),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: 20,
+                      width: 50,
+                      color: Color(0xffDEDEDE),
+                      child: Center(
+                        child: Text(date.year.toString()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+            ]));
+  }
+}
+
 
 class Homepage extends StatefulWidget {
   // const Homepage({Key? key}) : super(key: key);
@@ -426,44 +492,8 @@ class _HomepageState extends State<Homepage> {
                         fontWeight: FontWeight.w500,
                         fontSize: 25,
                         color: Color(0xffEA5353))),
-                SizedBox(
-                    width: 90,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  color: Color(0xffDEDEDE),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text("Date"),
-                          )
-                        ]))
+                timeanddate(),
+
               ],
             ),
           ),
@@ -532,15 +562,17 @@ class _HomepageState extends State<Homepage> {
                                     padding: const EdgeInsets.only(left: 80.0),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       children: [
                                         Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: const [
+                                          children: [
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text("${snapshot.data?.docs.first.get('subjects').length}",
+                                              child:Text(snapshot.data?.docs.first.get('subjects')[index]['subject'],
+
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -548,7 +580,7 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text("Room No.- 00",
+                                              child: Text(snapshot.data?.docs.first.get('subjects')[index]['room'],
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -556,7 +588,7 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text("Teacher Name",
+                                              child: Text(snapshot.data?.docs.first.get('subjects')[index]['teacher'],
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -564,25 +596,7 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                           ],
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8.0),
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 10),
-                                                  child: MaterialButton(
-                                                    color: Colors.white,
-                                                    onPressed: () => {},
-                                                    child: Text("Join"),
-                                                  ),
-                                                )
-                                              ]),
-                                        )
+
                                       ],
                                     ),
                                   )),
@@ -596,7 +610,7 @@ class _HomepageState extends State<Homepage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Center(
-                                      child: Text("12:00 PM",
+                                      child: Text(snapshot.data?.docs.first.get('subjects')[index]['time'],
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,

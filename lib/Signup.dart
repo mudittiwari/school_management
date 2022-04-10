@@ -245,6 +245,12 @@ class _SignupState extends State<Signup> {
                               'mobno': mobno.text.trim(),
                               'role': 'teacher'
                             });
+                            FirebaseFirestore.instance
+                                .collection('subjects')
+                                .add({
+                              'class':  class_.text.trim(),
+                              'subjects':[],
+                            });
                           } else {
                             FirebaseFirestore.instance
                                 .collection('principal')
