@@ -25,6 +25,24 @@ class _NoticeState extends State<Notice> {
   TextEditingController notice = TextEditingController();
   TextEditingController subject = TextEditingController();
 
+  showvalidatorbox(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(margin: EdgeInsets.only(left: 7), child: Text(message)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -53,18 +71,24 @@ class _NoticeState extends State<Notice> {
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                // print("mudit");
-                showLoaderDialog(context);
-                await FirebaseFirestore.instance.collection("notice").add({
-                  'added_by': widget.document.get('name'),
-                  'content': notice.text.trim(),
-                  'subject': subject.text.trim(),
-                });
-                notice.text = "";
-                subject.text = "";
-                Navigator.pop(context);
-                Navigator.pop(context);
-                setState(() {});
+                if(notice.text.trim().length==0 || subject.text.trim().length==0)
+                  {
+                    showvalidatorbox(context, "Invalid Notice");
+                  }
+                else {
+                  // print("mudit");
+                  showLoaderDialog(context);
+                  await FirebaseFirestore.instance.collection("notice").add({
+                    'added_by': widget.document.get('name'),
+                    'content': notice.text.trim(),
+                    'subject': subject.text.trim(),
+                  });
+                  notice.text = "";
+                  subject.text = "";
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {});
+                }
               },
               child: Text("Create"),
             ),
@@ -120,28 +144,36 @@ class _NoticeState extends State<Notice> {
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                var ref;
-                // print("mudit");
-                showLoaderDialog(context);
-                await FirebaseFirestore.instance
-                    .collection('notice')
-                    .where('subject', isEqualTo: sub)
-                    .get()
-                    .then((value) {
-                  ref = value.docs.first.id;
-                  print(ref);
-                }).catchError((e) {
-                  print(e);
-                });
-                await FirebaseFirestore.instance.collection('notice').doc(ref).update({
-                  'content': notice.text.trim(),
-                  'subject': subject.text.trim(),
-                });
-                notice.text = "";
-                subject.text = "";
-                Navigator.pop(context);
-                Navigator.pop(context);
-                setState(() {});
+                if(notice.text.trim().length==0 || subject.text.trim().length==0)
+                {
+                  showvalidatorbox(context, "Invalid Notice");
+                }
+                else {
+                  var ref;
+                  // print("mudit");
+                  showLoaderDialog(context);
+                  await FirebaseFirestore.instance
+                      .collection('notice')
+                      .where('subject', isEqualTo: sub)
+                      .get()
+                      .then((value) {
+                    ref = value.docs.first.id;
+                    print(ref);
+                  }).catchError((e) {
+                    print(e);
+                  });
+                  await FirebaseFirestore.instance.collection('notice')
+                      .doc(ref)
+                      .update({
+                    'content': notice.text.trim(),
+                    'subject': subject.text.trim(),
+                  });
+                  notice.text = "";
+                  subject.text = "";
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {});
+                }
               },
               child: Text("Submit"),
             ),
@@ -552,13 +584,7 @@ class _NoticeState extends State<Notice> {
                           child: Column(
                             children: [
                               ListTile(
-                                leading: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Color(0xffC4C4C4)),
-                                ),
+
                                 title: Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(

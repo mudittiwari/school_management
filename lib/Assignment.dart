@@ -21,8 +21,27 @@ class Assignment extends StatefulWidget {
 
 class _AssignmentState extends State<Assignment> {
   TextEditingController assignment = TextEditingController();
+  TextEditingController subject = TextEditingController();
   TextEditingController due_date = TextEditingController();
 
+
+  showvalidatorbox(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(margin: EdgeInsets.only(left: 7), child: Text(message)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -52,18 +71,27 @@ class _AssignmentState extends State<Assignment> {
             child: MaterialButton(
               onPressed: () async {
                 // print("mudit");
-                showLoaderDialog(context);
-                await FirebaseFirestore.instance.collection("assignment").add({
-                  'added_by': widget.document.get('name'),
-                  'class': widget.document.get('class'),
-                  'content': assignment.text.trim(),
-                  'due_date': due_date.text.trim(),
-                });
-                assignment.text = "";
-                due_date.text = "";
-                Navigator.pop(context);
-                Navigator.pop(context);
-                setState(() {});
+                if(subject.text.trim().length==0 || assignment.text.trim().length==0 || due_date.text.trim().length==0)
+                  {
+                    showvalidatorbox(context, "Invalid assignment");
+                  }
+                else
+                  {
+                    showLoaderDialog(context);
+                    await FirebaseFirestore.instance.collection("assignment").add({
+                      'added_by': widget.document.get('name'),
+                      'class': widget.document.get('class'),
+                      'content': assignment.text.trim(),
+                      'subject':subject.text.trim(),
+                      'due_date': due_date.text.trim(),
+                    });
+                    assignment.text = "";
+                    due_date.text = "";
+                    subject.text="";
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    setState(() {});
+                  }
               },
               child: Text("Create"),
             ),
@@ -75,6 +103,7 @@ class _AssignmentState extends State<Assignment> {
                 Navigator.pop(context);
                 assignment.text = "";
                 due_date.text = "";
+                subject.text="";
               },
               child: Text("Cancel"),
             ),
@@ -95,9 +124,14 @@ class _AssignmentState extends State<Assignment> {
                               InputDecoration(hintText: "Type due_date"),
                         ),
                         TextField(
+                          controller: subject,
+                          decoration:
+                              InputDecoration(hintText: "Type Subject"),
+                        ),
+                        TextField(
                           controller: assignment,
                           decoration:
-                              InputDecoration(hintText: "Type assignment"),
+                          InputDecoration(hintText: "Type assignment"),
                         ),
                       ],
                     )),
@@ -121,31 +155,38 @@ class _AssignmentState extends State<Assignment> {
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                var ref;
-                // print("mudit");
-                showLoaderDialog(context);
-                await FirebaseFirestore.instance
-                    .collection('assignment')
-                    .where('due_date', isEqualTo: sub)
-                    .get()
-                    .then((value) {
-                  ref = value.docs.first.id;
-                  print(ref);
-                }).catchError((e) {
-                  print(e);
-                });
-                await FirebaseFirestore.instance
-                    .collection('assignment')
-                    .doc(ref)
-                    .update({
-                  'content': assignment.text.trim(),
-                  'due_date': due_date.text.trim(),
-                });
-                assignment.text = "";
-                due_date.text = "";
-                Navigator.pop(context);
-                Navigator.pop(context);
-                setState(() {});
+                if(subject.text.trim().length==0 || assignment.text.trim().length==0 || due_date.text.trim().length==0)
+                {
+                  showvalidatorbox(context, "Invalid assignment");
+                }
+                else {
+                  var ref;
+                  // print("mudit");
+                  showLoaderDialog(context);
+                  await FirebaseFirestore.instance
+                      .collection('assignment')
+                      .where('due_date', isEqualTo: sub)
+                      .get()
+                      .then((value) {
+                    ref = value.docs.first.id;
+                    print(ref);
+                  }).catchError((e) {
+                    print(e);
+                  });
+                  await FirebaseFirestore.instance
+                      .collection('assignment')
+                      .doc(ref)
+                      .update({
+                    'content': assignment.text.trim(),
+                    'due_date': due_date.text.trim(),
+                    'subject': subject.text.trim(),
+                  });
+                  assignment.text = "";
+                  due_date.text = "";
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {});
+                }
               },
               child: Text("Submit"),
             ),
@@ -177,9 +218,14 @@ class _AssignmentState extends State<Assignment> {
                               InputDecoration(hintText: "Type new due_date"),
                         ),
                         TextField(
+                          controller: subject,
+                          decoration:
+                              InputDecoration(hintText: "Type new subject"),
+                        ),
+                        TextField(
                           controller: assignment,
                           decoration:
-                              InputDecoration(hintText: "Type new assignment"),
+                          InputDecoration(hintText: "Type new assignment"),
                         ),
                       ],
                     )),
@@ -524,13 +570,7 @@ class _AssignmentState extends State<Assignment> {
                           child: Column(
                             children: [
                               ListTile(
-                                leading: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Color(0xffC4C4C4)),
-                                ),
+
                                 title: Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
@@ -566,8 +606,40 @@ class _AssignmentState extends State<Assignment> {
                                           ),
                                         ],
                                       ),
-                                      Text(snapshot.data?.docs[index]
-                                          .get('content'))
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2.0, horizontal: 0),
+                                            child: Text(
+                                              "Subject: ",
+                                              style: TextStyle(
+                                                color: Color(0xffEA5353),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2.0, horizontal: 0),
+                                            child: Text(
+                                              snapshot.data?.docs[index]
+                                                  .get('subject'),
+                                              style: TextStyle(
+                                                color: Color(0xffEA5353),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical:2.0),
+                                        child: Text(snapshot.data?.docs[index]
+                                            .get('content')),
+                                      )
                                     ],
                                   ),
                                 ),

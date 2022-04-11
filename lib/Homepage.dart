@@ -13,7 +13,6 @@ import 'Notice.dart';
 import 'Profile.dart';
 import 'Results.dart';
 
-
 class timeanddate extends StatefulWidget {
   @override
   _timeanddateState createState() => _timeanddateState();
@@ -22,60 +21,77 @@ class timeanddate extends StatefulWidget {
 class _timeanddateState extends State<timeanddate> {
   DateTime now = DateTime.now();
   late DateTime date;
+
   @override
   void initState() {
-    date =DateTime(now.year, now.month, now.day);
+    date = DateTime(now.year, now.month, now.day);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 135,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        width: 145,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      height: 20,
-                      width: 30,
-                      color: Color(0xffDEDEDE),
-                      child: Center(
-                        child: Text(date.day.toString()),
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 20,
+                  width: 30,
+                  color: Color(0xffDEDEDE),
+                  child: Center(
+                    child: Text(date.day.toString()),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      height: 20,
-                      width: 30,
-                      color: Color(0xffDEDEDE),
-                      child: Center(
-                        child: Text(date.month.toString()),
-                      ),
-                    ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text('/'),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      height: 20,
-                      width: 50,
-                      color: Color(0xffDEDEDE),
-                      child: Center(
-                        child: Text(date.year.toString()),
-                      ),
-                    ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 20,
+                  width: 30,
+                  color: Color(0xffDEDEDE),
+                  child: Center(
+                    child: Text(date.month.toString()),
                   ),
-                ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text('/'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 20,
+                  width: 50,
+                  color: Color(0xffDEDEDE),
+                  child: Center(
+                    child: Text(date.year.toString()),
+                  ),
+                ),
               ),
 
-            ]));
+            ],
+          ),
+        ]));
   }
 }
-
 
 class Homepage extends StatefulWidget {
   // const Homepage({Key? key}) : super(key: key);
@@ -88,16 +104,18 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  TextEditingController time=TextEditingController();
-  TextEditingController name=TextEditingController();
-  TextEditingController roomno=TextEditingController();
-  TextEditingController teacher=TextEditingController();
+  TextEditingController time = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController roomno = TextEditingController();
+  TextEditingController teacher = TextEditingController();
+
   Future<QuerySnapshot> getclasses() async {
     return await FirebaseFirestore.instance
         .collection('subjects')
         .where('class', isEqualTo: widget.document.get('class'))
         .get();
   }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -118,6 +136,7 @@ class _HomepageState extends State<Homepage> {
       },
     );
   }
+
   showaddclass(BuildContext context) async {
     AlertDialog alert = AlertDialog(
         actions: [
@@ -128,11 +147,25 @@ class _HomepageState extends State<Homepage> {
                 // print("mudit");
                 showLoaderDialog(context);
                 var id;
-                await FirebaseFirestore.instance.collection('subjects').where('class',isEqualTo: widget.document.get('class')).get().then((value) {
-                  id=value.docs.first.id;
+                await FirebaseFirestore.instance
+                    .collection('subjects')
+                    .where('class', isEqualTo: widget.document.get('class'))
+                    .get()
+                    .then((value) {
+                  id = value.docs.first.id;
                 });
-                await FirebaseFirestore.instance.collection('subjects').doc(id).update({
-                  'subjects':FieldValue.arrayUnion([{"teacher":teacher.text.trim(),"time":time.text.trim(),"subject":name.text.trim(),'room':roomno.text.trim()}])
+                await FirebaseFirestore.instance
+                    .collection('subjects')
+                    .doc(id)
+                    .update({
+                  'subjects': FieldValue.arrayUnion([
+                    {
+                      "teacher": teacher.text.trim(),
+                      "time": time.text.trim(),
+                      "subject": name.text.trim(),
+                      'room': roomno.text.trim()
+                    }
+                  ])
                 });
 
                 name.text = "";
@@ -175,11 +208,13 @@ class _HomepageState extends State<Homepage> {
                         ),
                         TextField(
                           controller: roomno,
-                          decoration: InputDecoration(hintText: "Type room no."),
+                          decoration:
+                              InputDecoration(hintText: "Type room no."),
                         ),
                         TextField(
                           controller: teacher,
-                          decoration: InputDecoration(hintText: "Type teacher name"),
+                          decoration:
+                              InputDecoration(hintText: "Type teacher name"),
                         ),
                         TextField(
                           controller: time,
@@ -487,20 +522,19 @@ class _HomepageState extends State<Homepage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("TODAY CLASSES",
+                Text("TODAY'S CLASSES",
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 25,
+                        fontSize: 22,
                         color: Color(0xffEA5353))),
                 timeanddate(),
-
               ],
             ),
           ),
           Expanded(
             child: FutureBuilder(
               future: getclasses(),
-              builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -510,41 +544,41 @@ class _HomepageState extends State<Homepage> {
                     child: Icon(Icons.error),
                   );
                 } else {
-                  int? cnt=0;
-                  cnt=snapshot.data?.docs.first.get('subjects').length;
-                  if(cnt==null) {
-                    cnt=1;
+                  int? cnt = 0;
+                  cnt = snapshot.data?.docs.first.get('subjects').length;
+                  if (cnt == null) {
+                    cnt = 1;
                   } else {
-                    cnt+=1;
+                    cnt += 1;
                   }
                   return ListView.builder(
                     itemCount: cnt,
                     itemBuilder: (context, index) {
-                      if(index==(cnt!-1))
-                        {
-                          return widget.document.get('role') == 'teacher'
-                                  ? Row(
+                      if (index == (cnt! - 1)) {
+                        return widget.document.get('role') == 'teacher'
+                            ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      MaterialButton(
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 2.0, horizontal: 12),
-                                          onPressed: () {
-                                            showaddclass(context);
-                                          },
-                                          color: Color(0xffEEEEEE),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8)),
-                                          child: Text(
-                                            "Add Class",
-                                            style:
-                                                TextStyle(color: Color(0xffEA5353), fontSize: 17),
-                                          ),
-                                        ),
-                                    ],
-                                  )
-                                  : Text("");
-                        }
+                                children: [
+                                  MaterialButton(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 2.0, horizontal: 12),
+                                    onPressed: () {
+                                      showaddclass(context);
+                                    },
+                                    color: Color(0xffEEEEEE),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(
+                                      "Add Class",
+                                      style: TextStyle(
+                                          color: Color(0xffEA5353),
+                                          fontSize: 17),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text("");
+                      }
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 0),
@@ -565,14 +599,17 @@ class _HomepageState extends State<Homepage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child:Text(snapshot.data?.docs.first.get('subjects')[index]['subject'],
-
+                                              child: Text(
+                                                  snapshot.data?.docs.first.get(
+                                                          'subjects')[index]
+                                                      ['subject'],
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -580,7 +617,10 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text(snapshot.data?.docs.first.get('subjects')[index]['room'],
+                                              child: Text(
+                                                  snapshot.data?.docs.first.get(
+                                                          'subjects')[index]
+                                                      ['room'],
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -588,7 +628,10 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text(snapshot.data?.docs.first.get('subjects')[index]['teacher'],
+                                              child: Text(
+                                                  snapshot.data?.docs.first.get(
+                                                          'subjects')[index]
+                                                      ['teacher'],
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -596,7 +639,6 @@ class _HomepageState extends State<Homepage> {
                                             ),
                                           ],
                                         ),
-
                                       ],
                                     ),
                                   )),
@@ -610,7 +652,9 @@ class _HomepageState extends State<Homepage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Center(
-                                      child: Text(snapshot.data?.docs.first.get('subjects')[index]['time'],
+                                      child: Text(
+                                          snapshot.data?.docs.first
+                                              .get('subjects')[index]['time'],
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,

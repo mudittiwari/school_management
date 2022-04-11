@@ -343,219 +343,233 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
+              padding: const EdgeInsets.only(top:60,bottom: 24.0),
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Color(0xff342F2F)),
-                height: 450,
-                width: MediaQuery.of(context).size.width * .8,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+
+                width: MediaQuery.of(context).size.width * .9,
+                child: Stack(
+
+                  overflow: Overflow.visible,
                   children: [
-                    widget.document.get("role") == "student"
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * .8,
-                              height: 30,
-                              color: Color(0xffEEEEEE),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(
-                                      "Program:",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xffEA5353)),
-                                    )),
-                                  )),
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text("ABCD",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xffEA5353)))),
-                                    scrollDirection: Axis.horizontal,
-                                  ))
-                                ],
-                              ),
+                    Positioned(
+                      bottom: 115,
+                      left: MediaQuery.of(context).size.width * .35,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom:148.0),
+                        child: Container(
+                            height: 80,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color:Colors.white,
                             ),
-                          )
-                        : Text(""),
-                    widget.document.get("role") == "student"
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * .8,
-                              height: 30,
-                              color: Color(0xffEEEEEE),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                          child: Center(
-                                              child: Text(
-                                    "Roll No:",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Color(0xffEA5353)),
-                                  )))),
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(widget.document.get('rollno'),
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xffEA5353)))),
-                                    scrollDirection: Axis.horizontal,
-                                  ))
-                                ],
-                              ),
-                            ),
-                          )
-                        : Text(""),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(
-                              "Email:",
-                              style: TextStyle(
-                                  fontSize: 18, color: Color(0xffEA5353)),
-                            )))),
-                            Expanded(
-                                child: SingleChildScrollView(
-                              child: Center(
-                                  child: Text(widget.document.get('email'),
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xffEA5353)))),
-                              scrollDirection: Axis.horizontal,
-                            ))
-                          ],
-                        ),
+                            child: Icon(Icons.person,size: 40,)),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: 30,
-                        color: Color(0xffEEEEEE),
-                        child: Row(
-                          children: [
-                            Expanded(
-                             
-                                child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(
-                              "Mobile:",
-                              style: TextStyle(
-                                  fontSize: 18, color: Color(0xffEA5353)),
-                            )))),
-                            Expanded(
-                              
-                              child: SingleChildScrollView(
-                                child: Center(
-                                    child: Text(widget.document.get('mobno'),
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)))),
-                                scrollDirection: Axis.horizontal,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    widget.document.get("role") == "student"
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * .8,
-                              height: 30,
-                              color: Color(0xffEEEEEE),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(
-                                      "Guardian Name:",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xffEA5353)),
-                                    )),
-                                    scrollDirection: Axis.horizontal,
-                                  )),
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                      child: Text(widget.document.get('father'),
+                      padding: const EdgeInsets.symmetric(vertical:28.0),
+                      child: Wrap(
+
+//                  mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          widget.document.get("role") == "student"
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .9,
+                                    height: 30,
+                                    color: Color(0xffEEEEEE),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                            child: Center(
+                                                child: Text(
+                                              "Program:",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xffEA5353)),
+                                            ))),
+                                        Expanded(
+                                          flex: 2,
+                                            child: Center(
+                                                child: Text("ABCD",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Color(0xffEA5353)))))
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Text(""),
+                          widget.document.get("role") == "student"
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .9,
+                                    height: 30,
+                                    color: Color(0xffEEEEEE),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                            child: Center(
+                                                child: Text(
+                                          "Roll No:",
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              color: Color(0xffEA5353))),
+                                              fontSize: 14, color: Color(0xffEA5353)),
+                                        ))),
+                                        Expanded(
+                                          flex: 2,
+                                            child: Center(
+                                                child: Text(widget.document.get('rollno'),
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Color(0xffEA5353)))))
+                                      ],
                                     ),
-                                    scrollDirection: Axis.horizontal,
-                                  ))
-                                ],
-                              ),
-                            ),
-                          )
-                        : Text(""),
-                    widget.document.get("role") == "student"
-                        ? Padding(
+                                  ),
+                                )
+                              : Text(""),
+                          Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4.0, horizontal: 0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width * .8,
+                              width: MediaQuery.of(context).size.width * .9,
                               height: 30,
                               color: Color(0xffEEEEEE),
                               child: Row(
                                 children: [
                                   Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                      child: Text(
-                                        "Guardian Mobile:",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffEA5353)),
-                                      ),
-                                    ),
-                                    scrollDirection: Axis.horizontal,
-                                  )),
+                                    flex:1,
+                                      child: Center(
+                                          child: Text(
+                                    "Email:",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xffEA5353)),
+                                  ))),
                                   Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Center(
-                                        child: Text(widget.document.get('fathermob'),
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xffEA5353)))),
-                                    scrollDirection: Axis.horizontal,
-                                  ))
+                                    flex: 2,
+                                      child: Center(
+                                          child: Text(widget.document.get('email'),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xffEA5353)))))
                                 ],
                               ),
                             ),
-                          )
-                        : Text(""),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .9,
+                              height: 30,
+                              color: Color(0xffEEEEEE),
+                              child: Row(
+                                children: [
+                                  Expanded(
+flex:1,
+                                      child: Center(
+                                          child: Text(
+                                    "Mobile:",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xffEA5353)),
+                                  ))),
+                                  Expanded(
+flex:2,
+                                    child: Center(
+                                        child: Text(widget.document.get('mobno'),
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xffEA5353)))),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          widget.document.get("role") == "student"
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .9,
+                                    height: 30,
+                                    color: Color(0xffEEEEEE),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex:1,
+                                            child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left:4.0),
+                                                  child: Text(
+                                              "Guardian Name:",
+                                              style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Color(0xffEA5353)),
+                                            ),
+                                                ))),
+                                        Expanded(
+                                          flex: 2,
+                                            child: Center(
+                                              child: Text(widget.document.get('father'),
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Color(0xffEA5353))),
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Text(""),
+                          widget.document.get("role") == "student"
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .9,
+                                    height: 30,
+                                    color: Color(0xffEEEEEE),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                            child: Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left:2.0),
+                                                child: Text(
+                                                  "Guardian No:",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Color(0xffEA5353)),
+                                                ),
+                                              ),
+                                            )),
+                                        Expanded(
+                                          flex: 2,
+                                            child: Center(
+                                                child: Text(widget.document.get('fathermob'),
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Color(0xffEA5353)))))
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Text(""),
+                        ],
+                      ),
+                    ),
+
                   ],
                 ),
               ),

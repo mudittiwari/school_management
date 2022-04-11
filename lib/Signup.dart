@@ -206,7 +206,7 @@ class _SignupState extends State<Signup> {
                       } else if (fathername.text.trim().length == 0) {
                         showvalidatorbox(
                             context, "Please enter the father name");
-                      } else if (fathermobno.text.trim().length != 0) {
+                      } else if (fathermobno.text.trim().length != 10) {
                         showvalidatorbox(context,
                             "Please enter the correct father mobile number");
                       } else if (password.text.trim().length == 0) {

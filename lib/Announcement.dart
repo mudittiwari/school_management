@@ -48,26 +48,31 @@ class _AnnouncementState extends State<Announcement> {
     );
   }
 
-Addannouncemnet(BuildContext context) async {
+  Addannouncemnet(BuildContext context) async {
     AlertDialog alert = AlertDialog(
         actions: [
           Container(
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                // print("mudit");
-                showLoaderDialog(context);
-                await FirebaseFirestore.instance.collection("announcement").add(
-                    {
-                      'added_by': widget.document.get('name'),
-                      'content': announcement.text.trim(),
-                    });
-                announcement.text = "";
-                Navigator.pop(context);
-                Navigator.pop(context);
-               setState(() {
-
-               });
+                if(announcement.text.trim().length==0)
+                  {
+                    showvalidatorbox(context, "Invalid Announcement");
+                  }
+                else {
+                  // print("mudit");
+                  showLoaderDialog(context);
+                  await FirebaseFirestore.instance
+                      .collection("announcement")
+                      .add({
+                    'added_by': widget.document.get('name'),
+                    'content': announcement.text.trim(),
+                  });
+                  announcement.text = "";
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {});
+                }
               },
               child: Text("Create"),
             ),
@@ -106,7 +111,107 @@ Addannouncemnet(BuildContext context) async {
       },
     );
   }
-  Future<QuerySnapshot> getannouncements() async{
+  showvalidatorbox(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(margin: EdgeInsets.only(left: 7), child: Text(message)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  Editannouncement(BuildContext context, String sub) async {
+    AlertDialog alert = AlertDialog(
+        actions: [
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () async {
+                if(announcement.text.trim().length==0)
+                {
+                  showvalidatorbox(context, "Invalid Announcement");
+                }
+                else {
+                  var ref;
+                  // print("mudit");
+                  showLoaderDialog(context);
+                  await FirebaseFirestore.instance
+                      .collection('announcement')
+                      .where('content', isEqualTo: sub)
+                      .get()
+                      .then((value) {
+                    ref = value.docs.first.id;
+                    print(ref);
+                  }).catchError((e) {
+                    print(e);
+                  });
+                  await FirebaseFirestore.instance.collection('announcement')
+                      .doc(ref)
+                      .update({
+                    'content': announcement.text.trim(),
+//                    'subject': subject.text.trim(),
+                  });
+                  announcement.text = "";
+//                  subject.text = "";
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {});
+                }
+              },
+              child: Text("Submit"),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.pop(context);
+                announcement.text = "";
+//                subject.text = "";
+              },
+              child: Text("Cancel"),
+            ),
+          )
+        ],
+        content: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 7),
+                    child: Column(
+                      children: [
+
+                        TextField(
+                          controller: announcement,
+                          decoration:
+                          InputDecoration(hintText: "Type new announcement"),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
+        ));
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<QuerySnapshot> getannouncements() async {
     return await FirebaseFirestore.instance.collection('announcement').get();
   }
 
@@ -119,15 +224,15 @@ Addannouncemnet(BuildContext context) async {
             child: ListView(children: [
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                    onPressed: () =>
-                    {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Profile(widget.document)))
-                    },
+                    onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Profile(widget.document)))
+                        },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 14.0, horizontal: 0),
@@ -142,8 +247,8 @@ Addannouncemnet(BuildContext context) async {
                     color: Color(0xff342F2F)),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -151,18 +256,17 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () =>
-                  {
+                  onPressed: () => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Homepage(widget.document)))
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -175,8 +279,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -184,18 +288,17 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () =>
-                  {
+                  onPressed: () => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Attendence(widget.document)))
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -208,8 +311,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -250,12 +353,12 @@ Addannouncemnet(BuildContext context) async {
               // ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
                   onPressed: () => {},
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -268,8 +371,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -277,18 +380,17 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () =>
-                  {
+                  onPressed: () => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Results(widget.document)))
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -301,8 +403,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -310,18 +412,17 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () =>
-                  {
+                  onPressed: () => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Notice(widget.document)))
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -334,8 +435,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -343,10 +444,9 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () =>
-                  {
+                  onPressed: () => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -354,8 +454,8 @@ Addannouncemnet(BuildContext context) async {
                                 Announcement(widget.document)))
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -367,8 +467,8 @@ Addannouncemnet(BuildContext context) async {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                 child: Divider(
                   height: 2,
                   color: Colors.white,
@@ -376,19 +476,18 @@ Addannouncemnet(BuildContext context) async {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: MaterialButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     await FirebaseAuth.instance.signOut();
 
-                    Navigator.popUntil(
-                        context,
-                        ModalRoute.withName('/'));
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()));
                   },
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14.0, horizontal: 0),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -412,136 +511,119 @@ Addannouncemnet(BuildContext context) async {
             Expanded(
               child: FutureBuilder(
                 future: getannouncements(),
-                builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(color: Color(0xff342F2F),),);
-                  }
-                  else if (snapshot.hasError) {
-                    return Center(child: Icon(Icons.error),);
-                  }
-                  else {
-                    int? cnt=snapshot.data?.docs.length;
-                    if(cnt!=null)
-                      cnt+=1;
+                      child: CircularProgressIndicator(
+                        color: Color(0xff342F2F),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Icon(Icons.error),
+                    );
+                  } else {
+                    int? cnt = snapshot.data?.docs.length;
+                    if (cnt != null)
+                      cnt += 1;
                     else
-                      cnt=1;
+                      cnt = 1;
                     return ListView.builder(
                       itemCount: cnt,
                       itemBuilder: (context, index) {
-                        if(index==(cnt!-1))
-                          {
-                            return widget.document.get('role') == "teacher" ?
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row
-                                            (
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                MaterialButton
-                                                  (
-                                                    padding: EdgeInsets.symmetric(vertical: 2.0
-                                                        ,
-                                                        horizontal: 12
-                                                    )
-                                                    ,
-                                                    onPressed: (){
-                                                      Addannouncemnet(context);
-
-                                                    },
-                                                    color: Color
-                                                      (0xffEEEEEE)
-                                                    ,
-                                                    shape: RoundedRectangleBorder
-                                                      (
-                                                        borderRadius: BorderRadius.circular(8
-                                                        )
-                                                    )
-                                                    ,
-                                                    child: Text
-                                                      ("Add Announcement"
-                                                      ,
-                                                      style: TextStyle
-                                                        (
-                                                          color: Color
-                                                            (0xffEA5353)
-                                                          ,
-                                                          fontSize: 17
-                                                      )
-                                                      ,
-                                                    )
-                                                )
-                                                ,
-                                              ]
-                                          ),
-                                        )
-                                            :
-                                        Text
-                                          ("");
-                          }
-                        return Padding
-                          (
-                          padding: const EdgeInsets.all(8.0
-                          )
-                          ,
-                          child: Container
-                            (
-                            height: 200
-                            ,
-                            decoration: BoxDecoration
-                              (
-                              color: Color
-                                (0xffC4C4C4)
-                              ,
-                            )
-                            ,
-                            child: Row
-                              (
+                        if (index == (cnt! - 1)) {
+                          return widget.document.get('role') == "teacher"
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        MaterialButton(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 2.0, horizontal: 12),
+                                            onPressed: () {
+                                              Addannouncemnet(context);
+                                            },
+                                            color: Color(0xffEEEEEE),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Text(
+                                              "Add Announcement",
+                                              style: TextStyle(
+                                                  color: Color(0xffEA5353),
+                                                  fontSize: 17),
+                                            )),
+                                      ]),
+                                )
+                              : Text("");
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Color(0xffC4C4C4),
+                            ),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container
-                                  (
-                                  height: 200
-                                  ,
-                                  child: Text
-                                    (""
-                                  )
-                                  ,
-                                  width: 10
-                                  ,
-                                  decoration: BoxDecoration
-                                    (
-                                      color: Color
-                                        (0xffEA5353)
-                                      ,
-                                      borderRadius: BorderRadius.circular(5
-                                      )
-                                  )
-                                  ,
-                                )
-                                ,
-                                Expanded
-                                  (
-                                    child: Padding
-                                      (
-                                      padding: const EdgeInsets.all(10.0
-                                      )
-                                      ,
-                                      child: Text
-                                        (
-                                        snapshot.data?.docs[index].get("content")
-                                        ,
-                                        style: TextStyle
-                                          (
-                                          fontSize: 17,
-                                        ),
+                                Container(
+                                  height: 200,
+                                  child: Text(""),
+                                  width: 10,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffEA5353),
+                                      borderRadius: BorderRadius.circular(5)),
+                                ),
+                                Expanded(
+//                                  flex: 10,
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                    dense: true,
+                                    title: Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 4),
+                                            child: Text(
+                                              snapshot.data?.docs[index]
+                                                  .get('content'),
+                                              style: TextStyle(
+//                                                  color: Color(0xffEA5353),
+                                                fontSize: 18,
+//                                                  fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    )),
+                                    ),
+                                    trailing: widget.document.get('role') ==
+                                            'teacher'
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: IconButton(
+                                                onPressed: () {
+                                            Editannouncement(
+                                                context,
+                                                snapshot.data?.docs[index]
+                                                    .get('content'));
+                                                },
+                                                icon: Icon(Icons.edit)),
+                                          )
+                                        : Text(""),
+                                  ),
+                                ),
                               ],
-                            )
-                            ,
-                          )
-                          ,
+                            ),
+                          ),
                         );
                       },
                     );
@@ -747,8 +829,6 @@ Addannouncemnet(BuildContext context) async {
               ),
             ),
           ],
-        )
-    );
+        ));
   }
 }
-
