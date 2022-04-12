@@ -365,33 +365,33 @@ class _NoticeState extends State<Notice> {
                 color: Colors.white,
               ),
             ),
-            Padding(
-              padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: MaterialButton(
-                onPressed: () => {},
-                child: Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Department",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                color: Color(0xff342F2F),
-                elevation: 0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
+//            Padding(
+//              padding:
+//              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+//              child: MaterialButton(
+//                onPressed: () => {},
+//                child: Padding(
+//                  padding:
+//                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+//                  child: Align(
+//                      alignment: Alignment.centerLeft,
+//                      child: Text(
+//                        "Department",
+//                        style: TextStyle(color: Colors.white),
+//                      )),
+//                ),
+//                color: Color(0xff342F2F),
+//                elevation: 0,
+//              ),
+//            ),
+//            Padding(
+//              padding: const EdgeInsets.symmetric(
+//                  horizontal: 8.0, vertical: 0),
+//              child: Divider(
+//                height: 2,
+//                color: Colors.white,
+//              ),
+//            ),
             Padding(
               padding:
               const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),

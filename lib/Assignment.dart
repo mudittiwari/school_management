@@ -3,6 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/Homepage.dart';
+import 'package:school_management/Profile.dart';
 import 'package:school_management/Results.dart';
 
 import 'Announcement.dart';
@@ -256,7 +258,12 @@ class _AssignmentState extends State<Assignment> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile(widget.document)))
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
@@ -282,7 +289,12 @@ class _AssignmentState extends State<Assignment> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Homepage(widget.document)))
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
@@ -339,7 +351,12 @@ class _AssignmentState extends State<Assignment> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Assignment(widget.document)))
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),

@@ -2,6 +2,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -87,6 +89,70 @@ class _MyHomePageState extends State<MyHomePage> {
         return alert;
       },
     );
+  }
+  @override
+  void initState()
+  {
+//    mainfunction();
+    super.initState();
+    Timer(Duration(seconds: 1), mainfunction);
+  }
+
+  void mainfunction()
+  {
+//    print("mudit tiwari");
+    showLoaderDialog(context);
+    if(FirebaseAuth.instance.currentUser != null)
+      {
+//        showLoaderDialog(context);
+//        print("not null");
+        FirebaseFirestore.instance
+            .collection('teacher')
+            .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
+            .get()
+            .then((document)  {
+          // print(value.docs);
+
+          if (document.docs.isEmpty) {
+             FirebaseFirestore.instance
+                .collection('student')
+                .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
+                .get()
+                .then((doc) async {
+                  if(doc.docs.isEmpty){
+
+                  }
+                  else
+                    {
+                      Navigator.pop(context);
+                      WidgetsBinding.instance?.addPostFrameCallback((_) {
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) =>
+                                Homepage(doc.docs.first)));
+                      });
+                      return ;
+                    }
+            }).catchError((e){Navigator.pop(context);print(e);return ;});
+          } else {
+            Navigator.pop(context);
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) =>
+                      Homepage(document.docs.first)));
+
+            });
+            return ;
+          }
+        }).catchError((e) {
+          Navigator.pop(context);
+          print(e);
+          return;
+        });
+      }
+    else {
+      print("tiwariji");
+      Navigator.pop(context);
+    }
   }
 
   @override

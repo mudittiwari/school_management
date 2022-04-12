@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_management/Homepage.dart';
+import 'package:school_management/Profile.dart';
 import 'package:school_management/searchres.dart';
 
 import 'Announcement.dart';
@@ -532,7 +533,12 @@ class _ResultsState extends State<Results> {
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                  onPressed: () => {},
+                  onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Profile(widget.document)))
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14.0, horizontal: 0),

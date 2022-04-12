@@ -383,13 +383,13 @@ class _HomepageState extends State<Homepage> {
             //     elevation: 0,
             //   ),
             // ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-              child: Divider(
-                height: 2,
-                color: Colors.white,
-              ),
-            ),
+//            Padding(
+//              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+//              child: Divider(
+//                height: 2,
+//                color: Colors.white,
+//              ),
+//            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
