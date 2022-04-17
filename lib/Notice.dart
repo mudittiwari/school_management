@@ -71,11 +71,10 @@ class _NoticeState extends State<Notice> {
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                if(notice.text.trim().length==0 || subject.text.trim().length==0)
-                  {
-                    showvalidatorbox(context, "Invalid Notice");
-                  }
-                else {
+                if (notice.text.trim().length == 0 ||
+                    subject.text.trim().length == 0) {
+                  showvalidatorbox(context, "Invalid Notice");
+                } else {
                   // print("mudit");
                   showLoaderDialog(context);
                   await FirebaseFirestore.instance.collection("notice").add({
@@ -144,11 +143,10 @@ class _NoticeState extends State<Notice> {
             margin: EdgeInsets.only(left: 7),
             child: MaterialButton(
               onPressed: () async {
-                if(notice.text.trim().length==0 || subject.text.trim().length==0)
-                {
+                if (notice.text.trim().length == 0 ||
+                    subject.text.trim().length == 0) {
                   showvalidatorbox(context, "Invalid Notice");
-                }
-                else {
+                } else {
                   var ref;
                   // print("mudit");
                   showLoaderDialog(context);
@@ -162,7 +160,8 @@ class _NoticeState extends State<Notice> {
                   }).catchError((e) {
                     print(e);
                   });
-                  await FirebaseFirestore.instance.collection('notice')
+                  await FirebaseFirestore.instance
+                      .collection('notice')
                       .doc(ref)
                       .update({
                     'content': notice.text.trim(),
@@ -236,15 +235,14 @@ class _NoticeState extends State<Notice> {
           child: ListView(children: [
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                  onPressed: () =>
-                  {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Profile(widget.document)))
-                  },
+                  onPressed: () => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile(widget.document)))
+                      },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14.0, horizontal: 0),
@@ -259,8 +257,7 @@ class _NoticeState extends State<Notice> {
                   color: Color(0xff342F2F)),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -268,10 +265,9 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -279,7 +275,7 @@ class _NoticeState extends State<Notice> {
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -292,8 +288,7 @@ class _NoticeState extends State<Notice> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -301,10 +296,9 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -312,7 +306,7 @@ class _NoticeState extends State<Notice> {
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -325,8 +319,7 @@ class _NoticeState extends State<Notice> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -334,10 +327,9 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -345,7 +337,7 @@ class _NoticeState extends State<Notice> {
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -358,8 +350,7 @@ class _NoticeState extends State<Notice> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -394,10 +385,9 @@ class _NoticeState extends State<Notice> {
 //            ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -405,7 +395,7 @@ class _NoticeState extends State<Notice> {
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -418,8 +408,7 @@ class _NoticeState extends State<Notice> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -427,10 +416,9 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -438,22 +426,19 @@ class _NoticeState extends State<Notice> {
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Notice",
-
                       )),
                 ),
-
-                color:Color(0xffDBD9D9),
+                color: Color(0xffDBD9D9),
                 elevation: 0,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -461,33 +446,30 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () =>
-                {
+                onPressed: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              Announcement(widget.document)))
+                          builder: (context) => Announcement(widget.document)))
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Announcement",
-    style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       )),
                 ),
-                color:  Color(0xff342F2F),
+                color: Color(0xff342F2F),
                 elevation: 0,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
               child: Divider(
                 height: 2,
                 color: Colors.white,
@@ -495,19 +477,18 @@ class _NoticeState extends State<Notice> {
             ),
             Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
               child: MaterialButton(
-                onPressed: () async{
+                onPressed: () async {
                   await FirebaseAuth.instance.signOut();
 
-                  Navigator.popUntil(
-                      context,
-                      ModalRoute.withName('/'));
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()));
                 },
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -554,7 +535,8 @@ class _NoticeState extends State<Notice> {
                     itemCount: cnt,
                     itemBuilder: (context, index) {
                       if (index == (cnt! - 1)) {
-                        return widget.document.get('role') == "teacher"
+                        return widget.document.get('role') == "teacher" ||
+                                widget.document.get('role') == 'principal'
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
@@ -584,7 +566,6 @@ class _NoticeState extends State<Notice> {
                           child: Column(
                             children: [
                               ListTile(
-
                                 title: Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
@@ -610,7 +591,9 @@ class _NoticeState extends State<Notice> {
                                   ),
                                 ),
                                 trailing:
-                                    widget.document.get('role') == 'teacher'
+                                    widget.document.get('role') == 'teacher' ||
+                                            widget.document.get('role') ==
+                                                'principal'
                                         ? IconButton(
                                             onPressed: () {
                                               Editnotice(

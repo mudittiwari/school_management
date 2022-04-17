@@ -318,39 +318,39 @@ class _AnnouncementState extends State<Announcement> {
                   color: Colors.white,
                 ),
               ),
-              // Padding(
-              //   padding:
-              //   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              //   child: MaterialButton(
-              //     onPressed: () =>
-              //     {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (context) => Assignment(widget.document)))
-              //     },
-              //     child: Padding(
-              //       padding:
-              //       const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-              //       child: Align(
-              //           alignment: Alignment.centerLeft,
-              //           child: Text(
-              //             "Assignment",
-              //             style: TextStyle(color: Colors.white),
-              //           )),
-              //     ),
-              //     color: Color(0xff342F2F),
-              //     elevation: 0,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(
-              //       horizontal: 8.0, vertical: 0),
-              //   child: Divider(
-              //     height: 2,
-              //     color: Colors.white,
-              //   ),
-              // ),
+               Padding(
+                 padding:
+                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                 child: MaterialButton(
+                   onPressed: () =>
+                   {
+                     Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => Assignment(widget.document)))
+                   },
+                   child: Padding(
+                     padding:
+                     const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                     child: Align(
+                         alignment: Alignment.centerLeft,
+                         child: Text(
+                           "Assignment",
+                           style: TextStyle(color: Colors.white),
+                         )),
+                   ),
+                   color: Color(0xff342F2F),
+                   elevation: 0,
+                 ),
+               ),
+               Padding(
+                 padding: const EdgeInsets.symmetric(
+                     horizontal: 8.0, vertical: 0),
+                 child: Divider(
+                   height: 2,
+                   color: Colors.white,
+                 ),
+               ),
 //              Padding(
 //                padding:
 //                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -532,7 +532,7 @@ class _AnnouncementState extends State<Announcement> {
                       itemCount: cnt,
                       itemBuilder: (context, index) {
                         if (index == (cnt! - 1)) {
-                          return widget.document.get('role') == "teacher"
+                          return widget.document.get('role') == "teacher"||widget.document.get('role')=='principal'
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
@@ -606,7 +606,7 @@ class _AnnouncementState extends State<Announcement> {
                                       ),
                                     ),
                                     trailing: widget.document.get('role') ==
-                                            'teacher'
+                                            'teacher'||widget.document.get('role')=='principal'
                                         ? Padding(
                                             padding: const EdgeInsets.all(0.0),
                                             child: IconButton(

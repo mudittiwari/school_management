@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {
-          '/': (BuildContext context) => MyHomePage(),
-        },
+      routes: {
+        '/': (BuildContext context) => MyHomePage(),
+      },
       title: 'Flutter Demo',
       // home: MyHomePage(),
     );
@@ -90,67 +90,92 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
+
   @override
-  void initState()
-  {
+  void initState() {
 //    mainfunction();
     super.initState();
     Timer(Duration(seconds: 1), mainfunction);
   }
 
-  void mainfunction()
-  {
+  void mainfunction() {
 //    print("mudit tiwari");
     showLoaderDialog(context);
-    if(FirebaseAuth.instance.currentUser != null)
-      {
+    print(FirebaseAuth.instance.currentUser?.email);
+    if (FirebaseAuth.instance.currentUser != null) {
 //        showLoaderDialog(context);
-//        print("not null");
-        FirebaseFirestore.instance
-            .collection('teacher')
-            .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
-            .get()
-            .then((document)  {
-          // print(value.docs);
+        print("not null");
+      FirebaseFirestore.instance
+          .collection('teacher')
+          .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
+          .get()
+          .then((document) {
+        // print(value.docs);
 
-          if (document.docs.isEmpty) {
-             FirebaseFirestore.instance
-                .collection('student')
-                .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
-                .get()
-                .then((doc) async {
-                  if(doc.docs.isEmpty){
-
-                  }
-                  else
-                    {
-                      Navigator.pop(context);
-                      WidgetsBinding.instance?.addPostFrameCallback((_) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) =>
-                                Homepage(doc.docs.first)));
-                      });
-                      return ;
-                    }
-            }).catchError((e){Navigator.pop(context);print(e);return ;});
-          } else {
+        if (document.docs.isEmpty) {
+          FirebaseFirestore.instance
+              .collection('student')
+              .where('email',
+                  isEqualTo: FirebaseAuth.instance.currentUser?.email)
+              .get()
+              .then((doc) async {
+            if (doc.docs.isEmpty) {
+              FirebaseFirestore.instance
+                  .collection('principal')
+                  .where('email',
+                      isEqualTo: FirebaseAuth.instance.currentUser?.email)
+                  .get()
+                  .then((doc_) {
+                if (doc_.docs.isEmpty) {
+//                  Navigator.pop(context);
+                  return 0;
+                } else {
+                  Navigator.pop(context);
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Homepage(doc_.docs.first)));
+                  });
+                  return 0;
+                }
+              }).catchError((e) {
+                Navigator.pop(context);
+                print(e);
+                return 0;
+              });
+            } else {
+              Navigator.pop(context);
+              WidgetsBinding.instance?.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Homepage(doc.docs.first)));
+              });
+              return 0;
+            }
+          }).catchError((e) {
             Navigator.pop(context);
-            WidgetsBinding.instance?.addPostFrameCallback((_) {
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) =>
-                      Homepage(document.docs.first)));
-
-            });
-            return ;
-          }
-        }).catchError((e) {
+            print(e);
+            return 0;
+          });
+        } else {
           Navigator.pop(context);
-          print(e);
-          return;
-        });
-      }
-    else {
-      print("tiwariji");
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Homepage(document.docs.first)));
+          });
+          return 0;
+        }
+      }).catchError((e) {
+        Navigator.pop(context);
+        print(e);
+        return 0;
+      });
+    } else {
+//      print("tiwariji");
       Navigator.pop(context);
     }
   }
@@ -240,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       } else if (password.text.trim().length == 0) {
                         showvalidatorbox(context, "Please enter the password");
                       } else if (role.text.trim() != "student" &&
-                          role.text.trim() != "teacher") {
+                          role.text.trim() != "teacher" && role.text.trim() != "principal") {
                         showvalidatorbox(
                             context, "Please enter the correct role");
                       } else {

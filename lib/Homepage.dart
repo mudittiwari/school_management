@@ -4,6 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:school_management/Teachers.dart';
 import 'package:school_management/main.dart';
 
 import 'Announcement.dart';
@@ -12,6 +13,7 @@ import 'Attendence.dart';
 import 'Notice.dart';
 import 'Profile.dart';
 import 'Results.dart';
+import 'Students.dart';
 
 class timeanddate extends StatefulWidget {
   @override
@@ -105,11 +107,16 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   TextEditingController time = TextEditingController();
+  TextEditingController class_ = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController roomno = TextEditingController();
   TextEditingController teacher = TextEditingController();
 
   Future<QuerySnapshot> getclasses() async {
+    if(widget.document.get('role')=='principal')
+      {
+        return await FirebaseFirestore.instance.collection('subjects').get();
+      }
     return await FirebaseFirestore.instance
         .collection('subjects')
         .where('class', isEqualTo: widget.document.get('class'))
@@ -136,7 +143,110 @@ class _HomepageState extends State<Homepage> {
       },
     );
   }
+  showaddclassprincipal(BuildContext context)
+  async{
+    AlertDialog alert = AlertDialog(
+        actions: [
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () async {
+                // print("mudit");
+                showLoaderDialog(context);
+                var id;
+                await FirebaseFirestore.instance
+                    .collection('subjects')
+                    .where('class', isEqualTo: class_.text.trim())
+                    .get()
+                    .then((value) {
+                  id = value.docs.first.id;
+                });
+                await FirebaseFirestore.instance
+                    .collection('subjects')
+                    .doc(id)
+                    .update({
+                  'subjects': FieldValue.arrayUnion([
+                    {
+                      "teacher": teacher.text.trim(),
+                      "time": time.text.trim(),
+                      "subject": name.text.trim(),
+                      'room': roomno.text.trim()
+                    }
+                  ])
+                });
 
+                name.text = "";
+                teacher.text = "";
+                roomno.text = "";
+                time.text = "";
+                class_.text="";
+                Navigator.pop(context);
+                Navigator.pop(context);
+                setState(() {});
+              },
+              child: Text("Create"),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 7),
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.pop(context);
+                name.text = "";
+                teacher.text = "";
+                roomno.text = "";
+                time.text = "";
+                class_.text="";
+              },
+              child: Text("Cancel"),
+            ),
+          )
+        ],
+        content: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 7),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: name,
+                          decoration: InputDecoration(hintText: "Type subject"),
+                        ),
+                        TextField(
+                          controller: roomno,
+                          decoration:
+                          InputDecoration(hintText: "Type room no."),
+                        ),
+                        TextField(
+                          controller: teacher,
+                          decoration:
+                          InputDecoration(hintText: "Type teacher name"),
+                        ),
+                        TextField(
+                          controller: time,
+                          decoration: InputDecoration(hintText: "Type time"),
+                        ),
+                        TextField(
+                          controller: class_,
+                          decoration: InputDecoration(hintText: "Type class"),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
+        ));
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   showaddclass(BuildContext context) async {
     AlertDialog alert = AlertDialog(
         actions: [
@@ -364,32 +474,8 @@ class _HomepageState extends State<Homepage> {
                 color: Colors.white,
               ),
             ),
-            // Padding(
-            //   padding:
-            //       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-            //   child: MaterialButton(
-            //     onPressed: () => {},
-            //     child: Padding(
-            //       padding:
-            //           const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
-            //       child: Align(
-            //           alignment: Alignment.centerLeft,
-            //           child: Text(
-            //             "Department",
-            //             style: TextStyle(color: Colors.white),
-            //           )),
-            //     ),
-            //     color: Color(0xff342F2F),
-            //     elevation: 0,
-            //   ),
-            // ),
-//            Padding(
-//              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-//              child: Divider(
-//                height: 2,
-//                color: Colors.white,
-//              ),
-//            ),
+
+
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -483,6 +569,68 @@ class _HomepageState extends State<Homepage> {
                 color: Colors.white,
               ),
             ),
+            widget.document.get('role')=='principal'?Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Teachers(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Teachers",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ):Text(""),
+            widget.document.get('role')=='principal'?Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ):Text(""),
+            widget.document.get('role')=='principal'?Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: MaterialButton(
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Students(widget.document)))
+                },
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Students",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ),
+                color: Color(0xff342F2F),
+                elevation: 0,
+              ),
+            ):Text(""),
+            widget.document.get('role')=='principal'?Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+              child: Divider(
+                height: 2,
+                color: Colors.white,
+              ),
+            ):Text(""),
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -555,7 +703,7 @@ class _HomepageState extends State<Homepage> {
                     itemCount: cnt,
                     itemBuilder: (context, index) {
                       if (index == (cnt! - 1)) {
-                        return widget.document.get('role') == 'teacher'
+                        return widget.document.get('role') == 'teacher'||widget.document.get('role')=='principal'
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -563,7 +711,13 @@ class _HomepageState extends State<Homepage> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 2.0, horizontal: 12),
                                     onPressed: () {
-                                      showaddclass(context);
+                                      if(widget.document.get('role')=='principal')
+                                        {
+                                          showaddclassprincipal(context);
+                                        }
+                                      else {
+                                        showaddclass(context);
+                                      }
                                     },
                                     color: Color(0xffEEEEEE),
                                     shape: RoundedRectangleBorder(
@@ -606,36 +760,69 @@ class _HomepageState extends State<Homepage> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text(
-                                                  snapshot.data?.docs.first.get(
-                                                          'subjects')[index]
-                                                      ['subject'],
-                                                  style: TextStyle(
+                                              child: Row(
+                                                children: [
+                                                  Text("Subject:",style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
                                                   )),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left:4.0),
+                                                    child: Text(
+                                                        snapshot.data?.docs.first.get(
+                                                                'subjects')[index]
+                                                            ['subject'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text(
-                                                  snapshot.data?.docs.first.get(
-                                                          'subjects')[index]
-                                                      ['room'],
-                                                  style: TextStyle(
+                                              child: Row(
+                                                children: [
+                                                  Text("Room No:",style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
                                                   )),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left:4.0),
+                                                    child: Text(
+                                                        snapshot.data?.docs.first.get(
+                                                                'subjects')[index]
+                                                            ['room'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.all(4.0),
-                                              child: Text(
-                                                  snapshot.data?.docs.first.get(
-                                                          'subjects')[index]
-                                                      ['teacher'],
-                                                  style: TextStyle(
+                                              child: Row(
+                                                children: [
+                                                  Text("Teacher:",style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
                                                   )),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left:4.0),
+                                                    child: Text(
+                                                        snapshot.data?.docs.first.get(
+                                                                'subjects')[index]
+                                                            ['teacher'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
